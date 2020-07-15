@@ -14,21 +14,8 @@ class VoiceSplitter {
         return $this->srcData;
     }
 
-    function getHexData($srcPath) {
-        try {
-            $srcFile = fopen($srcPath, "r+b");
-            $srcFileSize = filesize($srcPath);
-            $srcData = fread($srcFile, $srcFileSize);
-            fclose($srcFile);
-            return bin2hex($srcData);
-            $srcArray = str_split(bin2hex($srcData), 2);
-
-            for ($i = 0; $i < count($srcArray); $i++) {
-                echo $srcArray[$i];
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
+    function getHexData() {
+        return bin2hex($this->srcData);
     }
 
     /**
