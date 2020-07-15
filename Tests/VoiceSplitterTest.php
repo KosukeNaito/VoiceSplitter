@@ -7,9 +7,7 @@ class VoiceSplitterTest extends Testcase {
     
     public function testConstruct() {
         $vs = new VoiceSplitter("./targets/normal.mp3");
-        $this->assertEquals(null !== $vs->getSrcData(), true);
-        $this->assertEquals(null !== $vs->getSrcPath(), true);
-        return $vs;
+        $this->assertEquals($vs->getSrcData() !== null, true);
     }
 
     public function testSplit() {

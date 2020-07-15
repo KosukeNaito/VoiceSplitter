@@ -2,36 +2,22 @@
 
 class VoiceSplitter {
 
-    private $srcPath;
     private $srcData;
 
     function __construct($srcPath) {
-        if ($this->setSrcPath($srcPath)) {
-            $this->readSrcData();
+        if (file_exists($srcPath)) {
+            $this->readSrcData($srcPath);
         }
-    }
-
-    public function getSrcPath() {
-        return $this->srcPath;
     }
 
     public function getSrcData() {
         return $this->srcData;
     }
 
-    private function setSrcPath($srcPath) {
-        if (file_exists($srcPath)) {
-            $this->srcPath = $srcPath;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function getHexData() {
+    function getHexData($srcPath) {
         try {
-            $srcFile = fopen($this->srcPath, "r+b");
-            $srcFileSize = filesize($this->srcPath);
+            $srcFile = fopen($srcPath, "r+b");
+            $srcFileSize = filesize($srcPath);
             $srcData = fread($srcFile, $srcFileSize);
             fclose($srcFile);
             return bin2hex($srcData);
@@ -48,15 +34,15 @@ class VoiceSplitter {
     /**
      * 変換元ファイルのデータを読みこむ
      */
-    private function readSrcData() {
-        if (!$this->srcPath) {
+    private function readSrcData($srcPath) {
+        if (!$srcPath) {
             echo "パスが定義されていません";
             $this->srcData = "";
             return;
         }
         try {
-            $srcFile = fopen($this->srcPath, "r+b");
-            $this->srcData = fread($srcFile, $this->getSrcFileSize());
+            $srcFile = fopen($srcPath, "r+b");
+            $this->srcData = fread($srcFile, $this->getSrcFileSize($srcPath));
             fclose($srcFile);
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -67,9 +53,9 @@ class VoiceSplitter {
     /**
      * 変換元ファイルのファイルサイズを返す
      */
-    private function getSrcFileSize() {
+    private function getSrcFileSize($srcPath) {
         try {
-            return filesize($this->srcPath);
+            return filesize($srcPath);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -93,7 +79,6 @@ class VoiceSplitter {
             }
         }
 
-        $this->getHexData();
     }
 
     function __destruct() {
